@@ -2,24 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Trabalho Prático</title>
-    
-    <script type="text/javascript" src="js/phaser.min.js"></script>
+    <title>Projeto Final</title>
     
     <style type="text/css">
         body{
-            
-            margin: 8px;
+            margin: 0;
+            background: #282E31;
+        }
+        head{
+            margin: 10;
         }
     
     </style>
     
+    <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/input.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
+    <script type="text/javascript" src="js/preload.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script type="text/javascript" src="js/oJogo.js"></script>
+    
+    <script>
+        (function() {
+          var game = new Phaser.Game(1200, 600, Phaser.canvas, "game");
+            
+            game.state.add("Input", input);
+            //game.state.add("Init", init);
+            //game.state.add("Preload", preload);            
+            //game.state.add("menu", menu);
+            //game.state.add("oJogo", oJogo);
+            //game.state.add("GameOver", gameOver);
+            
+            game.state.start("Input");
+            
+            game.anchor.setTo(0.5, 0.5);
+            
+        })();
+    
+    </script>
+    
 </head>
 
 <body>
-    <script type=text/javascript>
+    
+     <script type=text/javascript>
         
-var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+        
+        
+        
+        
+        
+/*var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -28,7 +61,7 @@ function preload() {
     //game.load.image('walls_1x2', 'assets/walls_1x2.png');
     game.load.image('phaser', 'assets/phaser-dude.png');
     game.load.spritesheet('coin','assets/coin.png',32,32,6);
-    game.load.image('wood', 'assets/wood.png');
+   
 
 }
 
@@ -45,53 +78,7 @@ var sprite;
 
 function create() {
     
-    /* var fragmentSrc = [
-
-        "precision mediump float;",
-
-        "uniform float     time;",
-        "uniform vec2      resolution;",
-        "uniform sampler2D iChannel0;",
-
-        "void main( void ) {",
-
-            "float t = time;",
-
-            "vec2 uv = gl_FragCoord.xy / resolution.xy;",
-            "vec2 texcoord = gl_FragCoord.xy / vec2(resolution.y);",
-
-            "texcoord.y -= t*0.2;",
-
-            "float zz = 1.0/(1.0-uv.y*1.7);",
-            "texcoord.y -= zz * sign(zz);",
-
-            "vec2 maa = texcoord.xy * vec2(zz, 1.0) - vec2(zz, 0.0) ;",
-            "vec2 maa2 = (texcoord.xy * vec2(zz, 1.0) - vec2(zz, 0.0))*0.3 ;",
-            "vec4 stone = texture2D(iChannel0, maa);",
-            "vec4 blips = texture2D(iChannel0, maa);",
-            "vec4 mixer = texture2D(iChannel0, maa2);",
-
-            "float shade = abs(1.0/zz);",
-
-            "vec3 outp = mix(shade*stone.rgb, mix(1.0, shade, abs(sin(t+maa.y-sin(maa.x))))*blips.rgb, min(1.0, pow(mixer.g*2.1, 2.0)));",
-            "gl_FragColor = vec4(outp,1.0);",
-
-        "}"
-    ];
-
-    //  Texture must be power-of-two sized or the filter will break
-    sprite = game.add.sprite(0, 0, 'wood_by_EricHart3d');
-    sprite.width = 1200;
-    sprite.height = 600;
-
-    var customUniforms = {
-        iChannel0: { type: 'sampler2D', value: sprite.texture, textureData: { repeat: true } }
-    };
-
-    filter = new Phaser.Filter(game, customUniforms, fragmentSrc);
-    filter.setResolution(1200, 600);
-
-    sprite.filters = [ filter ];*/
+   
 
     game.stage.backgroundColor='#000000';
     
@@ -191,7 +178,7 @@ function render() {
     //game.debug.body(sprite);
     //game.debug.bodyInfo(sprite, 32, 32);
 
-}
+}*/
 
     </script>
     
