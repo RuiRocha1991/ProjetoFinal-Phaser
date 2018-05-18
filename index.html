@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Trabalho Prático</title>
+    
+    <script type="text/javascript" src="js/phaser.min.js"></script>
+    
+    <style type="text/css">
+        body{
+            
+            margin: 8px;
+        }
+    
+    </style>
+    
+</head>
+
+<body>
+    <script type=text/javascript>
+        
+var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+
+function preload() {
+
+    game.load.tilemap('map', 'assets/collision_test.json', null, Phaser.Tilemap.TILED_JSON);
+    game.load.image('ground_1x1', 'assets/ground_1x1.png');
+    game.load.image('walls_1x2', 'assets/walls_1x2.png');
+    game.load.image('phaser', 'assets/phaser-dude.png');
+    game.load.image('estrela', 'assets/star.png');
+    game.load.spritesheet('coin','assets/coin.png',30,30,6);
+    game.load.image('wood_by_EricHart3d', 'assets/wood_by_EricHart3d.png');
+
+}
+
+    var map;
+    var layer;
+    var cursors;
+    var sprite;
+    var estrelas;
+    var coins;
+    var bg;
+        var anim;
+        var filter;
+var sprite;
+
+function create() {
+    
+    /* var fragmentSrc = [
+
+        "precision mediump float;",
+
+        "uniform float     time;",
+        "uniform vec2      resolution;",
+        "uniform sampler2D iChannel0;",
+
+        "void main( void ) {",
+
+            "float t = time;",
+
+            "vec2 uv = gl_FragCoord.xy / resolution.xy;",
+            "vec2 texcoord = gl_FragCoord.xy / vec2(resolution.y);",
+
+            "texcoord.y -= t*0.2;",
+
+            "float zz = 1.0/(1.0-uv.y*1.7);",
+            "texcoord.y -= zz * sign(zz);",
+
+            "vec2 maa = texcoord.xy * vec2(zz, 1.0) - vec2(zz, 0.0) ;",
+            "vec2 maa2 = (texcoord.xy * vec2(zz, 1.0) - vec2(zz, 0.0))*0.3 ;",
+            "vec4 stone = texture2D(iChannel0, maa);",
+            "vec4 blips = texture2D(iChannel0, maa);",
+            "vec4 mixer = texture2D(iChannel0, maa2);",
+
+            "float shade = abs(1.0/zz);",
+
+            "vec3 outp = mix(shade*stone.rgb, mix(1.0, shade, abs(sin(t+maa.y-sin(maa.x))))*blips.rgb, min(1.0, pow(mixer.g*2.1, 2.0)));",
+            "gl_FragColor = vec4(outp,1.0);",
+
+        "}"
+    ];
+
+    //  Texture must be power-of-two sized or the filter will break
+    sprite = game.add.sprite(0, 0, 'wood_by_EricHart3d');
+    sprite.width = 1200;
+    sprite.height = 600;
+
+    var customUniforms = {
+        iChannel0: { type: 'sampler2D', value: sprite.texture, textureData: { repeat: true } }
+    };
+
+    filter = new Phaser.Filter(game, customUniforms, fragmentSrc);
+    filter.setResolution(1200, 600);
+
+    sprite.filters = [ filter ];*/
+
+    game.stage.backgroundColor='#000000';
+    
+
+    //bg = game.add.tileSprite(0, 0, 800, 600, 'background');
+    //bg.fixedToCamera = true;
+    map = game.add.tilemap('map');
+
+    map.addTilesetImage('ground_1x1');
+    map.addTilesetImage('walls_1x2.png');
+    layer = map.createLayer('Tile Layer 1');
+   
+    layer.resizeWorld();
+  
+    map.setCollisionBetween(1, 12);
+
+    
+    
+    sprite = game.add.sprite(40, 300, 'phaser');
+
+    game.physics.arcade.enable(sprite);
+    
+
+    sprite.body.bounce.set(0.6);
+    sprite.body.tilePadding.set(32);
+    
+    sprite.body.bounce.y = 0.2;
+            sprite.body.gravity.y = 300;
+            sprite.body.colliderWorldBounds = true;
+
+    game.camera.follow(sprite);
+
+    game.physics.arcade.gravity.y = 200;
+
+    cursors = game.input.keyboard.createCursorKeys();
+    
+     coins= game.add.group();
+            coins.enableBody=true;
+            var x=100;
+    
+            while (x<1500){
+                var coin = coins.create(x, Math.random()*300,'coin');
+                coin.body.gravity.y=320;
+                coin.body.velocity.x=0;
+                x+=70;
+                //-- atribuir elasticidade aliatoria
+                coin.body.bounce.y=0.2;
+                coin.animations.add('roda',[0, 1, 2, 3,4],10 , true);
+                coin.play('roda');
+            }
+
+        
+
+}
+
+function update() {
+    
+ //filter.update();
+    game.physics.arcade.collide(sprite, layer);
+    game.physics.arcade.collide(coins, layer);
+    game.physics.arcade.collide(coins, sprite);
+
+    //  Un-comment these to gain full control over the sprite
+    // sprite.body.velocity.x = 10;
+    // sprite.body.velocity.y = 10;
+
+      sprite.body.velocity.x = 0;
+   
+    
+    if (cursors.up.isDown)
+    {
+        sprite.body.velocity.y = -150;
+    }
+    else if (cursors.down.isDown)
+    {
+        sprite.body.velocity.y = 150;
+    }
+
+    if (cursors.left.isDown)
+    {
+        sprite.body.velocity.x = -150;
+    }
+    else if (cursors.right.isDown)
+    {
+        sprite.body.velocity.x = 150;
+    }
+
+}
+
+function render() {
+
+    //  Useful debug things you can turn on to see what's happening
+
+    //game.debug.spriteBounds(sprite);
+    //game.debug.cameraInfo(game.camera, 32, 32);
+    //game.debug.body(sprite);
+    //game.debug.bodyInfo(sprite, 32, 32);
+
+}
+
+    </script>
+    
+</body>    
+
+</html>
