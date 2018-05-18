@@ -25,11 +25,10 @@ function preload() {
 
     game.load.tilemap('map', 'assets/collision_test.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('ground_1x1', 'assets/ground_1x1.png');
-    game.load.image('walls_1x2', 'assets/walls_1x2.png');
+    //game.load.image('walls_1x2', 'assets/walls_1x2.png');
     game.load.image('phaser', 'assets/phaser-dude.png');
-    game.load.image('estrela', 'assets/star.png');
-    game.load.spritesheet('coin','assets/coin.png',30,30,6);
-    game.load.image('wood_by_EricHart3d', 'assets/wood_by_EricHart3d.png');
+    game.load.spritesheet('coin','assets/coin.png',32,32,6);
+    game.load.image('wood', 'assets/wood.png');
 
 }
 
@@ -142,6 +141,7 @@ function create() {
                 coin.body.bounce.y=0.2;
                 coin.animations.add('roda',[0, 1, 2, 3,4],10 , true);
                 coin.play('roda');
+                coin.anchor.setTo(0.5,0.5);
             }
 
         
