@@ -3,7 +3,7 @@ var menu = function(game){}
 menu.prototype= {
     
     create : function(){
-        
+    
         var titulo = this.game.add.sprite(160, 160, "menu");
         titulo.anchor.setTo(0.5,0.5);
         
@@ -16,7 +16,8 @@ menu.prototype= {
     },
     
     iniciaJogo : function(){
-        
+        this.game.soundClick.play();
+        this.game.soundIntro.pause();
         this.game.state.start("oJogo");
         
     }
