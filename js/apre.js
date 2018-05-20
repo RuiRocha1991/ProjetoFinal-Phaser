@@ -62,22 +62,27 @@
             this.filter.setResolution(1200, 600);
 
             this.sprite.filters = [ this.filter ];
-            this.logo= this.game.add.sprite(300,250,"logo");
+            this.logo= this.game.add.sprite(600,300,"logo");
             this.logo.scale.setTo(0.5,0.5);
             this.logo.anchor.setTo(0.5,0.5);
-            this.bmpText = this.game.add.bitmapText(600, 250, 'desyrel', 'Phaser & Pixi\nrocking!', 30);
-            this.bmpText.scale.setTo(0.5,0.5);
-            this.bmpText.anchor.setTo(0.5,0.5);
+         
+            var style = {font: '40px', fill: '#000', align:'left', style:'bold', boundsAlignH: 'top', boundsAlignV:'top'}
+            this.texto = this.game.add.text(600, 400, 'Trabalho Realizado por: Rui Rocha, nº 19787\n Tecnologias Multimédia', style);
+            this.texto.scale.setTo(0.5,0.5);  
+            this.texto.anchor.set(0.5);
+
+           
+         
             
      },          
     update : function () {       
         
         this.filter.update();
         this.game.add.tween(this.logo.scale).to( { x: 1, y: 1}, 1000, Phaser.Easing.Linear.None, true);
-        this.bmpText.text = 'Trabalho Realizado por: Rui Rocha \n n:19787\n Eng Informatica ';
-        this.game.add.tween(this.bmpText.scale).to( { x: 1, y: 1}, 1000, Phaser.Easing.Linear.None, true);
+        this.game.add.tween(this.texto.scale).to( { x: 1, y: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, Number.MAX_VALUE, true);
+       
         
-        var btnPlay = this.game.add.button(600, 500, "play",
+        var btnPlay = this.game.add.button(600, 550, "play",
                                           this.iniciaJogo, this);
         
         btnPlay.anchor.setTo(0.5, 0.5);

@@ -1,15 +1,17 @@
 var ojogo = function(game){
-     var map;
+    var map;
     var layer;
     var cursors;
     var sprite;
     var estrelas;
     var coins;
     var bg;
-        var anim;
-        var filter;
-var sprite;
+    var anim;
+    var filter;
+    var sprite;
     var soundGame;
+    var torpedos;
+    var bullets;
  
 }
 
@@ -22,8 +24,7 @@ create : function () {
         this.game.stage.backgroundColor='#000000';
     
 
-    //bg = game.add.tileSprite(0, 0, 800, 600, 'background');
-    //bg.fixedToCamera = true;
+    
     this.map = this.game.add.tilemap('map');
 
     this.map.addTilesetImage('ground_1x1');
@@ -53,11 +54,11 @@ create : function () {
     this.game.physics.arcade.gravity.y = 200;
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
-    
+    this.torpedos= this.game.add.group();
      this.coins= this.game.add.group();
             this.coins.enableBody=true;
             var x=100;
-    
+            var xTorpedo=150;
             while (x<1500){
                 var coin = this.coins.create(x, Math.random()*300,'coin');
                 coin.body.gravity.y=320;
@@ -68,9 +69,11 @@ create : function () {
                 coin.animations.add('roda',[0, 1, 2, 3,4],10 , true);
                 coin.play('roda');
                 coin.anchor.setTo(0.5,0.5);
+                
+                var torpedo = this.torpedos.create(xTorpedo, 30, 'torpedo');
             }
 
-        
+        this.bullets=this.game.add.group();
 
 },
 
@@ -81,6 +84,11 @@ update : function () {
     this.game.physics.arcade.collide(this.coins, this.layer);
     this.game.physics.arcade.collide(this.coins, this.sprite);
 
+    
+    for(var i=0; i<this.torpedos.length;i++){
+        var bullet = this.bullets.create(this.torpedos[i].x, 30,'bullet');
+    }
+    
     //  Un-comment these to gain full control over the sprite
     // sprite.body.velocity.x = 10;
     // sprite.body.velocity.y = 10;
