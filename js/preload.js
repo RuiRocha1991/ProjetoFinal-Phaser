@@ -6,13 +6,13 @@ preload.prototype={
         
         this.game.load.image("play", "assets/play.png");
         this.game.load.image('wood', 'assets/wood.png');
-        
+         this.game.load.image('background', 'assets/background.png');
         
         this.game.load.audio('intro', 'assets/sounds/intro.ogg');
         this.game.load.audio('menuClick', 'assets/sounds/menu_switch.ogg');
         this.game.load.image("logo", "assets/logo.png");
         this.game.load.image("play", "assets/play.png");
-        this.game.load.bitmapFont('desyrel', 'assets/desyrel-pink.png', 'assets/desyrel-pink.xml');
+        this.game.load.image("pressKey", "assets/pressKey.png");
         
         this.game.load.tilemap('map', 'assets/collision_test.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('ground_1x1', 'assets/ground_1x1.png');
@@ -21,7 +21,7 @@ preload.prototype={
         this.game.load.image('bullet', 'assets/bullet.png');
         this.game.load.spritesheet('coin','assets/coin.png',32,32,6);
         
-        this.game.load.audio('bullet', 'assets/sounds/blaster.ogg');
+        this.game.load.audio('bulletDisparo', 'assets/sounds/blaster.ogg');
         this.game.load.audio('explode', 'assets/sounds/explode.ogg');
         this.game.load.audio('playerDeath', 'assets/sounds/player_death.ogg');
         this.game.load.audio('jump', 'assets/sounds/squit.ogg');

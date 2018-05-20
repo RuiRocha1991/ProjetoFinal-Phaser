@@ -82,7 +82,7 @@
         this.game.add.tween(this.texto.scale).to( { x: 1, y: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, Number.MAX_VALUE, true);
        
         
-        var btnPlay = this.game.add.button(600, 550, "play",
+        var btnPlay = this.game.add.button(600, 550, "pressKey",
                                           this.iniciaJogo, this);
         
         btnPlay.anchor.setTo(0.5, 0.5);
