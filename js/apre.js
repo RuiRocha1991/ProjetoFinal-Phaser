@@ -66,8 +66,8 @@
             this.logo.scale.setTo(0.5,0.5);
             this.logo.anchor.setTo(0.5,0.5);
          
-            var style = {font: '40px', fill: '#000', align:'left', style:'bold', boundsAlignH: 'top', boundsAlignV:'top'}
-            this.texto = this.game.add.text(600, 400, 'Trabalho Realizado por: Rui Rocha, nº 19787\n Tecnologias Multimédia', style);
+         
+            this.texto= this.game.add.image(600,425, 'autor');
             this.texto.scale.setTo(0.5,0.5);  
             this.texto.anchor.set(0.5);
 
@@ -82,16 +82,20 @@
         this.game.add.tween(this.texto.scale).to( { x: 1, y: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, Number.MAX_VALUE, true);
        
         
-        var btnPlay = this.game.add.button(600, 550, "pressKey",
-                                          this.iniciaJogo, this);
-        
+        var btnPlay = this.game.add.image(600, 550, "pressKey");
         btnPlay.anchor.setTo(0.5, 0.5);
+        var enter= this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        
+        if(enter.isDown){
+              this.iniciaJogo();
+        }
+        
     },
     
     iniciaJogo : function(){
-        this.game.soundClick.volume=5.0;
+          this.game.soundClick.volume=1;
         this.game.soundClick.play();
-        this.game.state.start("Menu");        
+        this.game.state.start("Menu");    
     }
      
      
