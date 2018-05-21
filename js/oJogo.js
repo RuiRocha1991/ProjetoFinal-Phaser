@@ -18,12 +18,14 @@ var ojogo = function(game){
     var soundStep1;
     var sounStep2;
     var soundJump;
-    var bulletTime=0;
+    var bulletTime;
+    var explode;
 }
-
+ var bullet;
 ojogo.prototype={
     
     create : function () {
+        this.bulletTime=0;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.addElementos();
         this.configurarJogador();
@@ -42,14 +44,6 @@ ojogo.prototype={
 
         
 
-        for (var i = 0; i < 20; i++)
-        {
-            var b = this.bullets.create(0, 0, 'bullet');
-            b.name = 'bullet' + i;
-            b.exists = false;
-            b.visible = false;
-            b.checkWorldBounds = true;
-        }
 
 
 },
@@ -58,31 +52,17 @@ update : function () {
     
     this.game.physics.arcade.collide(this.sprite, this.layer);
     this.game.physics.arcade.collide(this.coins, this.layer);
-    this.game.physics.arcade.collide(this.coins, this.sprite);
     this.game.physics.arcade.collide(this.sprite,this.torpedo1 );
+    this.game.physics.arcade.overlap(this.sprite, this.coins, this.coletorCoins,null, this);
+    this.game.physics.arcade.overlap(this.sprite, this.bullets, this.colideBullets,null, this);
+    this.move();
     
-    
-
-    this.sprite.body.velocity.x = 0;
-   
-   
-    if (this.cursors.left.isDown)
-    {
-        this.sprite.body.velocity.x = -150;
-    }
-    else if (this.cursors.right.isDown)
-    {
-        this.sprite.body.velocity.x = 150;
-    }
-    
-    if (this.cursors.up.isDown && this.sprite.body.touching.down || this.cursors.up.isDown && this.sprite.body.onFloor())
-    {
-        this.sprite.body.velocity.y = -300;
-    }
-    var bullet;
+    //console.log(this.game.time.now );
+   console.log('Bullet Time: '+ this.bulletTime );
     if (this.game.time.now > this.bulletTime)
     {
         this.disparar();
+        console.log(this.game.time.now );
     }
 
 },
@@ -114,13 +94,22 @@ addElementos : function(){
     this.bullets=this.game.add.group();
     this.game.physics.arcade.enable(this.bullets);
     this.bullets.enableBody=true;
+    this.bullets.createMultiple(500,'bullet');
+    //this.bullets.setAll('anchor.x', 0.5);
+    this.bullets.setAll('anchor.y', 0.5);
+    this.bullets.setAll('outOfBoundsKill', true);
+    this.bullets.setAll('checkWorldBounds', true);
+
+    this.explode= this.game.add.sprite(0,0, 'background');
+    this.game.physics.arcade.enable(this.explode);
+    this.explode.enableBody=true;
     
-    this.torpedo1 = this.game.add.sprite(150, 50, 'torpedo');
+    this.torpedo1 = this.game.add.sprite(250, 600, 'torpedo');
     this.game.physics.arcade.enable(this.torpedo1);
     this.torpedo1.enableBody=true;
     this.torpedo1.body.immovable = true;
     this.torpedo1.anchor.setTo(0.5, 0.5);
-    this.torpedo1.rotation=3.15;
+    //this.torpedo1.rotation=3.15;
     
 },
     
@@ -137,17 +126,50 @@ addElementos : function(){
     },
     
     disparar : function(){
+        console.log("dispara");
         bullet = this.bullets.getFirstExists(false);
-            bullet.reset(this.torpedo1.body.x, this.torpedo1.body.y);
-            bullet.body.velocity.y = 300;
-            this.bulletTime = this.game.time.now + 150;
+            bullet.reset(this.torpedo1.body.x+5, this.torpedo1.body.y);
+           
+            this.game.physics.arcade.moveToObject(bullet, {x:250, y:0}, 200);
+            //bullet.body.velocity.y = -300;
+            this.bulletTime = this.game.time.now + Math.floor(Math.random()*5000)-2000;
         
+        
+    },
+    
+    move : function (){
+        
+        this.sprite.body.velocity.x = 0;
+        if (this.cursors.left.isDown)
+    {
+        this.sprite.body.velocity.x = -150;
+    }
+    else if (this.cursors.right.isDown)
+    {
+        this.sprite.body.velocity.x = 150;
+    }
+    
+    if (this.cursors.up.isDown && this.sprite.body.touching.down || this.cursors.up.isDown && this.sprite.body.onFloor())
+    {
+        this.sprite.body.velocity.y = -300;
+    }
         
     },
     
     render : function(){
    // this.game.debug.body(this.torpedo1);
-}
+    },
+    
+    coletorCoins : function(sprite, coin){
+        coin.kill();
+    },
+    
+    
+    colideBullets : function (sprite, bullet){
+        bullet.kill();
+        coin.animations.add('roda',[0, 1, 2, 3,4],10 , true);
+        coin.play('roda');
+    }
     
     
     

@@ -24,6 +24,7 @@ preload.prototype={
         this.game.load.image('torpedo1', 'assets/torpedo1.png');
         this.game.load.image('bullet', 'assets/bullet.png');
         this.game.load.spritesheet('coin','assets/coin.png',32,32,6);
+        this.game.load.spritesheet('explode','assets/explode.png',134,124,16);
         
         this.game.load.audio('bulletDisparo', 'assets/sounds/blaster.ogg');
         this.game.load.audio('explode', 'assets/sounds/explode.ogg');
