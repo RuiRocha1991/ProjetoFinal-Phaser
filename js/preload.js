@@ -19,12 +19,12 @@ preload.prototype={
         
         this.game.load.tilemap('map', 'assets/collision_test.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('ground_1x1', 'assets/ground_1x1.png');
-        this.game.load.image('phaser', 'assets/phaser-dude.png');
+        this.game.load.spritesheet('phaser', 'assets/dude.png',32,48);
         this.game.load.image('torpedo', 'assets/torpedo.png');
         this.game.load.image('torpedo1', 'assets/torpedo1.png');
         this.game.load.image('bullet', 'assets/bullet.png');
         this.game.load.spritesheet('coin','assets/coin.png',32,32,6);
-        this.game.load.spritesheet('explode','assets/explode.png',134,124,16);
+        this.game.load.spritesheet('explode','assets/explode.png',128,124,16);
         
         this.game.load.audio('bulletDisparo', 'assets/sounds/blaster.ogg');
         this.game.load.audio('explode', 'assets/sounds/explode.ogg');
