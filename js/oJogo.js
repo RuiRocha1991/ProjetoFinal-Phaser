@@ -27,6 +27,9 @@ var ojogo = function(game){
     var soundStep1;
     var sounStep2;
     var soundJump;
+    var soundDisp;
+    var soundDeath;
+    var soundCollide;
     var emitter;
     var explode;
     var emitter;
@@ -49,17 +52,22 @@ ojogo.prototype={
         this.addElementos();
         this.configurarJogador();
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        var x=100;
-        while (x<1500){
-            var coin = this.coins.create(x, Math.random()*300,'coin');
+        var x=0;
+        while (x<25){
+            var coin = this.coins.create(this.rnd.integerInRange(50,1500), this.rnd.integerInRange(50,500),'coin');
+            
             coin.body.gravity.y=320;
             coin.body.velocity.x=0;
             coin.body.bounce.y=0.2;
             coin.animations.add('roda',[0, 1, 2, 3,4],10 , true);
             coin.play('roda');
             coin.anchor.setTo(0.5,0.5);
-            x+=70;
+            x++;
         }
+        var style = {font: '60px', fill: '#000', align:'left', style:'bold', boundsAlignH: 'top', boundsAlignV:'top'}
+    this.texto = this.game.add.text(50, 40, 'Pontuação: ', style);
+    this.texto.anchor.set(0.5);
+        
 },
 
 update : function () {
@@ -71,9 +79,14 @@ update : function () {
     this.game.physics.arcade.overlap(this.sprite, this.bullets, this.animaExplode,this.colideBullets, this);
     this.move();
     this.dispara();
-    var style = {font: '60px', fill: '#000', align:'left', style:'bold', boundsAlignH: 'top', boundsAlignV:'top'}
-    this.texto = this.game.add.text(600, 200, 'MENU', style);
-    this.texto.anchor.set(0.5);
+    
+    
+     console.log(this.sprite.body.x);
+    if(this.sprite.body.x >= 1510 && this.sprite.body.y <= 80){
+        console.log("cheguei");
+        this.game.state.start("End");
+    }
+    
 
 },
 
@@ -83,6 +96,10 @@ addElementos : function(){
     this.soundStep1= this.game.add.audio('step1');
     this.soundStep2= this.game.add.audio('step2');
     this.soundJump= this.game.add.audio('jump');
+    this.soundDisp=this.game.add.audio('bulletDisparo');
+    this.soundDisp.volume=0.1;
+    this.soundDeath=this.game.add.audio('playerDeath');
+    this.soundCollide=this.game.add.audio('explode');
     this.background= this.game.add.image(0,0, 'background');
     this.background.scale.setTo(3,2);
     
@@ -192,6 +209,7 @@ addElementos : function(){
     },
     
     torpedo1disparar : function(){
+        this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo1.body.x+5, this.torpedo1.body.y);
         this.game.physics.arcade.moveToObject(bullet, {x:250, y:0}, Math.floor(Math.random()*200)+100);
@@ -199,6 +217,7 @@ addElementos : function(){
     },
     
     torpedo2disparar : function(){
+         this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo2.body.x+5, this.torpedo2.body.y+30);
         this.game.physics.arcade.moveToObject(bullet, {x:500, y:600}, Math.floor(Math.random()*200)+100);
@@ -206,6 +225,7 @@ addElementos : function(){
     },
     
     torpedo3disparar : function(){
+        this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo3.body.x+5, this.torpedo3.body.y);
         this.game.physics.arcade.moveToObject(bullet, {x:750, y:0}, Math.floor(Math.random()*200)+100);
@@ -213,6 +233,7 @@ addElementos : function(){
     },
     
     torpedo4disparar : function(){
+        this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo4.body.x+5, this.torpedo4.body.y+30);
         this.game.physics.arcade.moveToObject(bullet, {x:1000, y:600}, Math.floor(Math.random()*200)+100);
@@ -220,6 +241,7 @@ addElementos : function(){
     },
     
     torpedo5disparar : function(){
+        this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo5.body.x+5, this.torpedo5.body.y);
         this.game.physics.arcade.moveToObject(bullet, {x:1250, y:0}, Math.floor(Math.random()*200)+100);
@@ -227,6 +249,7 @@ addElementos : function(){
     },
     
     torpedo6disparar : function(){
+        this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo6.body.x+5, this.torpedo6.body.y+30);
         this.game.physics.arcade.moveToObject(bullet, {x:1400, y:600}, Math.floor(Math.random()*200)+100);
@@ -253,7 +276,12 @@ addElementos : function(){
     },
     
     render : function(){
-   // this.game.debug.body(this.torpedo1);
+    this.game.debug.body(this.sprite);
+        this.game.debug.spriteInfo(this.sprite, 32, 32);
+        /*if(this.emitter != null){
+            this.game.debug.spriteInfo(this.emitter, 30, 100);
+        }*/
+        
     },
     
     coletorCoins : function(sprite, coin){
@@ -272,8 +300,10 @@ addElementos : function(){
             this.emitter.makeParticles('coin');
             this.emitter.start(false, 0, this.countCoins);
             this.countCoins=0; 
+            this.soundCollide.play();
         }else{
             this.soundGame.pause();
+            this.soundDeath.play();
             this.game.state.start("oJogo");
         }
         

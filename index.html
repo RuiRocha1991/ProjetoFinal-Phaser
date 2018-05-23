@@ -21,6 +21,7 @@
     <script type="text/javascript" src="js/preload.js"></script>
     <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/ojogo.js"></script>
+    <script type="text/javascript" src="js/end.js"></script>
     
     <script>
         (function() {
@@ -30,7 +31,7 @@
             game.state.add("Preload", preload);            
             game.state.add("Menu", menu);
             game.state.add("oJogo", ojogo);
-           /* game.state.add("GameOver", gameOver);*/
+            game.state.add("End", end);
             game.state.start("Init");
         
             var soundIntro;
