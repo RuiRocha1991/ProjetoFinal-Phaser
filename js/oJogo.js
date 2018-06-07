@@ -4,12 +4,10 @@ var ojogo = function(game){
     var layer;
     var cursors;
     var sprite;
-    var estrelas;
     var coins;
     var bg;
     var anim;
     var filter;
-    var sprite;
     var soundGame;
     var torpedo1;
     var bulletTime1;
@@ -24,19 +22,23 @@ var ojogo = function(game){
     var torpedo6;
     var bulletTime6;
     var bullets;
-    var soundStep1;
-    var sounStep2;
-    var soundJump;
     var soundDisp;
     var soundDeath;
     var soundCollide;
     var emitter;
     var explode;
-    var emitter;
     var countCoins;
-    var tempo;
+    var tempoMinuto;
+    var tempoSegundo;
+    var pontuacao;
+    var textoPontuacao;
+    var textoTempo;
+    var textoNCoins;
+    var atingido;
+    var exit;
 }
  var bullet;
+
 ojogo.prototype={
     
     create : function () {
@@ -46,8 +48,11 @@ ojogo.prototype={
         this.bulletTime4=0;
         this.bulletTime5=0;
         this.bulletTime6=0;
-        
+        this.tempoMinuto=0;
+        this.tempoSegundo=0;
+        this.pontuacao += 0; 
         this.countCoins=0;
+        this.atingido=0;
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.addElementos();
         this.configurarJogador();
@@ -64,10 +69,22 @@ ojogo.prototype={
             coin.anchor.setTo(0.5,0.5);
             x++;
         }
-        var style = {font: '60px', fill: '#000', align:'left', style:'bold', boundsAlignH: 'top', boundsAlignV:'top'}
-    this.texto = this.game.add.text(50, 40, 'Pontuação: ', style);
-    this.texto.anchor.set(0.5);
+        var style1 = {font: '20px', fill: '#FFF', align:'left', boundsAlignH: 'top', boundsAlignV:'top'}
+        this.textoPontuacao = this.game.add.text(33, 30, 'Pontuação: 0', style1);
+        this.textoPontuacao.fixedToCamera = true;
+        this.textoNCoins = this.game.add.text(33, 60, 'Moedas: 0', style1);
+        this.textoNCoins.fixedToCamera = true;
+        this.textoTempo = this.game.add.text(33, 90, 'Tempo: 0', style1);
+        this.textoTempo.fixedToCamera = true;
         
+        this.game.time.events.loop(Phaser.Timer.MINUTE, this.updateTempoMinuto, this);
+        this.game.time.events.loop(Phaser.Timer.SECOND, this.updateTempoSegundo, this);
+        
+        this.btnPausa = this.add.button( 1180, 30, 'botao-pausa', this.pausaGame, this);
+        this.btnPausa.fixedToCamera = true;                                  
+		this.btnPausa.anchor.set(1, 0);
+        this.btnPausa.input.useHandCursor = true;
+       
 },
 
 update : function () {
@@ -75,20 +92,45 @@ update : function () {
     this.game.physics.arcade.collide(this.sprite, this.layer);
     this.game.physics.arcade.collide(this.coins, this.layer);
     this.game.physics.arcade.collide(this.sprite,this.torpedo1 );
+    this.game.physics.arcade.collide(this.sprite,this.torpedo2 );
+    this.game.physics.arcade.collide(this.sprite,this.torpedo3 );
+    this.game.physics.arcade.collide(this.sprite,this.torpedo4 );
+    this.game.physics.arcade.collide(this.sprite,this.torpedo5 );
+    this.game.physics.arcade.collide(this.sprite,this.torpedo6 );
+
     this.game.physics.arcade.overlap(this.sprite, this.coins, this.coletorCoins,null, this);
     this.game.physics.arcade.overlap(this.sprite, this.bullets, this.animaExplode,this.colideBullets, this);
     this.move();
     this.dispara();
     
     
-     console.log(this.sprite.body.x);
+    
     if(this.sprite.body.x >= 1510 && this.sprite.body.y <= 80){
-        console.log("cheguei");
-        this.game.state.start("End");
+        this.soundGame.pause();
+        
+        var lista=[this.countCoins, this.tempoMinuto, this.tempoSegundo, this.pontuacao, this.atingido];
+        this.game.state.start("End", true, false, lista);
+        
     }
     
 
 },
+    
+    updateTempoMinuto :function(){
+        this.tempoMinuto++;
+        this.tempoSegundo=0;
+        this.textoTempo.setText('Tempo: ' + this.tempoMinuto + ':'+this.tempoSegundo);  
+    },
+                                
+    updateTempoSegundo :function(){
+        this.tempoSegundo++;
+        if(this.tempoSegundo<10){
+            this.textoTempo.setText('Tempo: ' + this.tempoMinuto + ':0'+this.tempoSegundo);  
+        }else{
+            this.textoTempo.setText('Tempo: ' + this.tempoMinuto + ':'+this.tempoSegundo);  
+        }
+        
+    },
 
 addElementos : function(){
     this.soundGame=this.game.add.audio('soundGame');
@@ -125,7 +167,7 @@ addElementos : function(){
     this.bullets.setAll('anchor.y', 0.5);
     this.bullets.setAll('outOfBoundsKill', true);
     this.bullets.setAll('checkWorldBounds', true);
-    
+    this.exit= this.game.add.image(1450, 50, 'exit')
     this.torpedo1 = this.game.add.sprite(250, 590, 'torpedo');
     this.game.physics.arcade.enable(this.torpedo1);
     this.torpedo1.enableBody=true;
@@ -139,7 +181,7 @@ addElementos : function(){
     this.torpedo2.anchor.setTo(0.5, 0.5);
     this.torpedo2.rotation=3.15;
     
-    this.torpedo3 = this.game.add.sprite(750, 590, 'torpedo');
+    this.torpedo3 = this.game.add.sprite(775, 590, 'torpedo');
     this.game.physics.arcade.enable(this.torpedo3);
     this.torpedo3.enableBody=true;
     this.torpedo3.body.immovable = true;
@@ -228,7 +270,7 @@ addElementos : function(){
         this.soundDisp.play();
         bullet = this.bullets.getFirstExists(false);
         bullet.reset(this.torpedo3.body.x+5, this.torpedo3.body.y);
-        this.game.physics.arcade.moveToObject(bullet, {x:750, y:0}, Math.floor(Math.random()*200)+100);
+        this.game.physics.arcade.moveToObject(bullet, {x:775, y:0}, Math.floor(Math.random()*200)+100);
         this.bulletTime3 = this.game.time.now + Math.floor(Math.random()*7000)-2000;        
     },
     
@@ -276,22 +318,25 @@ addElementos : function(){
     },
     
     render : function(){
-    this.game.debug.body(this.sprite);
-        this.game.debug.spriteInfo(this.sprite, 32, 32);
-        /*if(this.emitter != null){
-            this.game.debug.spriteInfo(this.emitter, 30, 100);
-        }*/
+//    this.game.debug.body(this.sprite);
+//        this.game.debug.spriteInfo(this.sprite, 32, 32);
+//        /*if(this.emitter != null){
+//            this.game.debug.spriteInfo(this.emitter, 30, 100);
+//        }*/
         
     },
     
     coletorCoins : function(sprite, coin){
         coin.kill();
         this.countCoins ++;
+        this.textoNCoins.setText('Moedas: '+this.countCoins);
+        this.pontuacao =this.countCoins* 10;  
+        this.textoPontuacao.setText('Pontuação: ' + this.pontuacao);
     },
     
     colideBullets : function (sprite, bullet){
         bullet.kill()
-        
+        this.atingido++;
     },
     
     animaExplode : function (){
@@ -300,14 +345,39 @@ addElementos : function(){
             this.emitter.makeParticles('coin');
             this.emitter.start(false, 0, this.countCoins);
             this.countCoins=0; 
+            this.pontuacao=0;
+            this.textoNCoins.setText('Moedas: '+this.countCoins);
+            this.textoPontuacao.setText('Pontuação: ' + this.pontuacao);
             this.soundCollide.play();
+            
         }else{
             this.soundGame.pause();
             this.soundDeath.play();
             this.game.state.start("oJogo");
         }
         
-    }
+    },
+    
+    pausaGame: function() {
+        // -- Estado do jogo em "PAUSE"
+        var fundoMenu= this.game.add.image(600,340, 'fundoMenu');
+        fundoMenu.anchor.setTo(0.5, 0.5);
+		this.game.paused = true;        
+        var style1 = {font: '20px', fill: '#000', align:'left', boundsAlignH: 'top', boundsAlignV:'top'}
+        var mensagemTextoPausa = this.game.add.text( 600,400, "PAUSA\nPressione na área de jogo para continuar.",style1);
+		mensagemTextoPausa.anchor.set(0.5);
+        
+        // -- função adicionada que irá aguardar que um qualquer tecla seja pressionada
+        // -- -----------------------------------------
+		this.input.onDown.add(function(){
+                // -- "destrói" a mensagem de texto
+			    mensagemTextoPausa.destroy();
+            fundoMenu.destroy();
+                // -- retira o estado do jogo de "PAUSE"
+                this.game.paused = false;
+		}, this);
+        // -- -----------------------------------------
+	}
     
     
     
