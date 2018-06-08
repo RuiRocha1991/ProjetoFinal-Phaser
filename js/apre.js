@@ -10,10 +10,13 @@
  apre.prototype={    
      
      create : function(){
+         //--> declarar o som que vai ser executado na introdução do jogo
          this.game.soundIntro = this.game.add.audio('intro');
+         //--> declarar o som que vai ser utilizado sempre que é realizado algum click
          this.game.soundClick= this.game.add.audio('menuClick');
+         //--> inicia o som de introdução
          this.game.soundIntro.play();
-        
+         //--> variavel com metodos para apresentar o efeito no ecra de apresentação
          var fragmentSrc = [
 
         "precision mediump float;",
@@ -48,7 +51,7 @@
         "}"
     ];
 
-            //  Texture must be power-of-two sized or the filter will break
+            //--> carrega a textura apresentada no ecra de apresentação
             this.sprite = this.game.add.sprite(0, 0, 'wood');
             this.sprite.width = 1200;
             this.sprite.height = 600;
@@ -57,23 +60,19 @@
             var customUniforms = {
                 iChannel0: { type: 'sampler2D', value: this.sprite.texture, textureData: { repeat: true } }
             };
-
+            
+            //--> associar a textura de fundo do ecra apresentação
             this.filter = new Phaser.Filter(this.game, customUniforms, fragmentSrc);
             this.filter.setResolution(1200, 600);
-
             this.sprite.filters = [ this.filter ];
+            //--> imagem com o logo da instituíção
             this.logo= this.game.add.sprite(600,300,"logo");
             this.logo.scale.setTo(0.5,0.5);
             this.logo.anchor.setTo(0.5,0.5);
-         
-         
+            //--> imagem com as informações do autor
             this.texto= this.game.add.image(600,425, 'autor');
             this.texto.scale.setTo(0.5,0.5);  
-            this.texto.anchor.set(0.5);
-
-           
-         
-            
+            this.texto.anchor.set(0.5);      
      },          
     update : function () {       
         
@@ -81,7 +80,7 @@
         this.game.add.tween(this.logo.scale).to( { x: 1, y: 1}, 1000, Phaser.Easing.Linear.None, true);
         this.game.add.tween(this.texto.scale).to( { x: 1, y: 1 }, 2000, Phaser.Easing.Linear.None, true, 0, Number.MAX_VALUE, true);
        
-        
+        //--> butao para iniciar o jogo
         var btnPlay = this.game.add.image(600, 550, "pressKey");
         btnPlay.anchor.setTo(0.5, 0.5);
         var enter= this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -93,8 +92,9 @@
     },
     
     iniciaJogo : function(){
-          this.game.soundClick.volume=1;
+        this.game.soundClick.volume=1;
         this.game.soundClick.play();
+        //--> inicia o estado menu
         this.game.state.start("Menu");    
     }
      

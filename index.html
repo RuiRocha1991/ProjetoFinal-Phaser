@@ -14,7 +14,7 @@
         }
     
     </style>
-    
+    //-- identificar todos os estados do jogo
     <script type="text/javascript" src="js/phaser.min.js"></script>
     <script type="text/javascript" src="js/apre.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
@@ -25,13 +25,14 @@
     
     <script>
         (function() {
-          var game = new Phaser.Game(1200, 600, Phaser.canvas, "game");
+            var game = new Phaser.Game(1200, 600, Phaser.canvas, "game");
             game.state.add("Init", init);
             game.state.add("Apre", apre);
             game.state.add("Preload", preload);            
             game.state.add("Menu", menu);
             game.state.add("oJogo", ojogo);
             game.state.add("End", end);
+            //--> inicia o primeiro estado
             game.state.start("Init");
         
             var soundIntro;

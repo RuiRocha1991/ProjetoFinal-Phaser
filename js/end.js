@@ -10,6 +10,7 @@ var end = function(game){
 end.prototype= {
     
     init: function (lista) {
+        //-> carregar dados enviados do estado ojogo
 		this.pontos=lista[3];
         this.coins=lista[0];
         this.minutos=lista[1];
@@ -19,7 +20,7 @@ end.prototype= {
     
     
     create : function(){
-        //this.game.soundIntro = this.game.add.audio('intro');
+        
         this.game.soundIntro.play();
         var textoMenu;
         this.background= this.game.add.image(0,0, 'background');
@@ -63,7 +64,7 @@ end.prototype= {
     },
     
     iniciaJogo : function(){
-        
+        //- funcao que inicia o jogo
         this.game.soundClick.play();
         this.game.soundIntro.pause();
         this.game.state.start("oJogo");

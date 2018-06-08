@@ -5,6 +5,7 @@ var menu = function(game){
 menu.prototype= {
     
     create : function(){
+        
         var textoMenu;
         this.background= this.game.add.image(0,0, 'background');
         this.background.scale.setTo(2,2);

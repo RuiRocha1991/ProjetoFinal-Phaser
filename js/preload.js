@@ -3,11 +3,10 @@ var preload = function(game){}
 preload.prototype={
     
     preload : function(){
-        
+        //--> carrega os dados todos necessários para o jogo.
         this.game.load.image("play", "assets/play.png");
         this.game.load.image('wood', 'assets/wood.png');
-         this.game.load.image('background', 'assets/background.png');
-        
+        this.game.load.image('background', 'assets/background.png');
         this.game.load.audio('intro', 'assets/sounds/intro.ogg');
         this.game.load.audio('menuClick', 'assets/sounds/menu_switch.ogg');
         this.game.load.image("logo", "assets/logo.png");
@@ -28,17 +27,12 @@ preload.prototype={
         this.game.load.audio('bulletDisparo', 'assets/sounds/blaster.ogg');
         this.game.load.audio('explode', 'assets/sounds/explode.ogg');
         this.game.load.audio('playerDeath', 'assets/sounds/player_death.ogg');
-        this.game.load.audio('jump', 'assets/sounds/squit.ogg');
-        this.game.load.audio('step1', 'assets/sounds/steps1.ogg');
-        this.game.load.audio('step2', 'assets/sounds/steps2.ogg');
-
         this.game.load.audio('soundGame', 'assets/sounds/game.ogg');
-        
         
     },
     
     create : function(){
-        
+        //--> inicia o estado de apresentação do jogo
         this.game.state.start("Apre");
     }
 }
